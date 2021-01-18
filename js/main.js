@@ -15,8 +15,7 @@ getEle("addItem").addEventListener("click", function () {
 
   var newActivity = new Task(activity);
   list.AddTask(newActivity);
-  addActivity(list.arr);
-
+  checkList(list.arr);
   setLocalStorage();
 });
 
@@ -35,37 +34,32 @@ function checkList(list) {
       });
 }
 
-function addActivity(arr) {
-  var content = "";
-  arr.forEach(function (item) {
-    content += `
+function addActivity(task) {
+  return `
              <li>
-             <span>${item.Newtask}</span>
+             <span>${task.Newtask}</span>
               <div class="buttons">
-                  <button class="remove" onclick="deleteToDo(${item.ID})">
+                  <button class="remove" onclick="deleteToDo(${task.ID})">
                     <i class="fa fa-trash-alt"></i>
                   </button>
-                  <button class="complete" onclick="changeStatus(${item.ID})">
+                  <button class="complete" onclick="changeStatus(${task.ID})">
                     <i class="fas fa-check-circle"></i>
                     <i class="far fa-check-circle"></i>
                   </button>
               </div>
              </li>
           `;
-  });
-  getEle("todo").innerHTML = content;
 }
 
 function deleteToDo(id) {
   list.deleteTask(id);
-  addActivity(list.arr);
+  checkList(list.arr);
   alert("Task Delete");
   setLocalStorage();
 }
 
 function changeStatus(ID) {
   var taskChange = list.getinfoTask(ID);
-
   if (taskChange.status !== "completed") {
     taskChange.status = "completed";
   } else {
@@ -73,7 +67,7 @@ function changeStatus(ID) {
   }
   alert("Task Complete");
   list.updateTask(taskChange);
-  addActivity(list.arr);
+  checkList(list.arr);
   setLocalStorage();
 }
 
@@ -85,7 +79,7 @@ function setLocalStorage() {
 function getLocalStorage() {
   if (localStorage.getItem("LIST")) {
     list.arr = JSON.parse(localStorage.getItem("LIST"));
-    addActivity(list.arr);
+    checkList(list.arr);
   }
 }
 
